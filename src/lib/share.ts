@@ -5,20 +5,21 @@ import { getStoredIsHighContrastMode } from './localStorage'
 
 export const shareStatus = (
   guesses: string[],
+  solution: string,
   lost: boolean,
   isHardMode: boolean
 ) => {
   navigator.clipboard.writeText(
     `${GAME_TITLE} ${solutionIndex} ${lost ? 'X' : guesses.length}/6${
       isHardMode ? '*' : ''
-    }\n\n` + generateEmojiGrid(guesses)
+    }\n\n` + generateEmojiGrid(guesses, solution)
   )
 }
 
-export const generateEmojiGrid = (guesses: string[]) => {
+export const generateEmojiGrid = (guesses: string[], solution: string) => {
   return guesses
     .map((guess) => {
-      const status = getGuessStatuses(guess)
+      const status = getGuessStatuses(guess, solution)
       const isHighContrast = getStoredIsHighContrastMode()
       return guess
         .split('')

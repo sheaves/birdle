@@ -8,6 +8,8 @@ type Props = {
   handleClose: () => void
   isHardMode: boolean
   handleHardMode: Function
+  isPracticeMode: boolean
+  handlePracticeMode: Function
   isDarkMode: boolean
   handleDarkMode: Function
   isHardModeErrorModalOpen: boolean
@@ -20,6 +22,8 @@ export const SettingsModal = ({
   handleClose,
   isHardMode,
   handleHardMode,
+  isPracticeMode,
+  handlePracticeMode,
   isDarkMode,
   handleDarkMode,
   isHardModeErrorModalOpen: isHardModeAlertModalOpen,
@@ -34,6 +38,11 @@ export const SettingsModal = ({
           flag={isHardMode}
           handleFlag={handleHardMode}
         />
+        <SettingsToggle
+          settingName="Practice Mode"
+          flag={isPracticeMode}
+          handleFlag={handlePracticeMode}
+        />           
         <SettingsToggle
           settingName="Dark Mode"
           flag={isDarkMode}

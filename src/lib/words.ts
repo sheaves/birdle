@@ -10,16 +10,12 @@ export const isWordInWordList = (word: string) => {
   )
 }
 
-export const isWinningWord = (word: string) => {
-  return solution === word
-}
-
 // build a set of previously revealed letters - present and correct
 // guess must use correct letters in that space and any other revealed letters
-export const findFirstUnusedReveal = (word: string, guesses: string[]) => {
+export const findFirstUnusedReveal = (word: string, guesses: string[], solution: string) => {
   const knownLetterSet = new Set<string>()
   for (const guess of guesses) {
-    const statuses = getGuessStatuses(guess)
+    const statuses = getGuessStatuses(guess, solution)
 
     for (let i = 0; i < guess.length; i++) {
       if (statuses[i] === 'correct' || statuses[i] === 'present') {
@@ -49,10 +45,18 @@ export const getWordOfDay = () => {
   const nextday = (index + 1) * msInDay + epochMs
 
   return {
-    solution: WORDS[index % WORDS.length].toUpperCase(),
+    dailySolution: WORDS[index % WORDS.length].toUpperCase(),
     solutionIndex: index,
     tomorrow: nextday,
   }
 }
 
-export const { solution, solutionIndex, tomorrow } = getWordOfDay()
+export const { dailySolution, solutionIndex, tomorrow } = getWordOfDay()
+
+export const getRandomWord = () => {
+  const index = Math.floor(Math.random()*WORDS.length)
+  return {
+    solution: WORDS[index].toUpperCase()
+  }
+}
+

@@ -2,6 +2,7 @@ import {
   InformationCircleIcon,
   ChartBarIcon,
   CogIcon,
+  RefreshIcon,
 } from '@heroicons/react/outline'
 import { useState, useEffect } from 'react'
 import { Alert } from './components/alerts/Alert'
@@ -27,8 +28,8 @@ import {
 } from './constants/settings'
 import {
   isWordInWordList,
-  isWinningWord,
-  solution,
+  dailySolution,
+  getRandomWord,
   findFirstUnusedReveal,
 } from './lib/words'
 import { addStatsForCompletedGame, loadStats } from './lib/stats'
@@ -68,20 +69,6 @@ function App() {
   )
   const [successAlert, setSuccessAlert] = useState('')
   const [isRevealing, setIsRevealing] = useState(false)
-  const [guesses, setGuesses] = useState<string[]>(() => {
-    const loaded = loadGameStateFromLocalStorage()
-    if (loaded?.solution !== solution) {
-      return []
-    }
-    const gameWasWon = loaded.guesses.includes(solution)
-    if (gameWasWon) {
-      setIsGameWon(true)
-    }
-    if (loaded.guesses.length === MAX_CHALLENGES && !gameWasWon) {
-      setIsGameLost(true)
-    }
-    return loaded.guesses
-  })
 
   const [stats, setStats] = useState(() => loadStats())
 
@@ -131,9 +118,62 @@ function App() {
     setStoredIsHighContrastMode(isHighContrast)
   }
 
+  const [isPracticeMode, setIsPracticeMode] = useState(
+    localStorage.getItem('practiceMode')
+      ? localStorage.getItem('practiceMode') === 'practice'
+      : false
+  )
+
+  const handlePracticeMode = (isPractice: boolean) => {
+    setIsGameLost(false)
+    setIsGameWon(false)
+    setIsPracticeMode(isPractice)
+    localStorage.setItem('practiceMode', isPractice ? 'practice' : 'normal')
+  }
+
+
+  const [solution, setSolution] = useState('')  
+  const [guesses, setGuesses] = useState<string[]>([])
+
+  const reloadPracticeState = () => {
+      setSolution(getRandomWord()['solution'])
+      setIsGameWon(false)
+      setIsGameLost(false)
+      setGuesses([])    
+  }
+
+  const reloadDailyState = () => {
+      setSolution(dailySolution)
+
+      const loaded = loadGameStateFromLocalStorage()
+      if (loaded?.solution !== dailySolution) {
+        setIsGameWon(false)
+        setIsGameLost(false)
+        setGuesses([])
+      }
+      else {
+        const gameWasWon = loaded.guesses.includes(dailySolution)
+        if (gameWasWon) {
+          setIsGameWon(true)
+          setIsGameLost(false)
+        }
+        if (loaded.guesses.length === MAX_CHALLENGES && !gameWasWon) {
+          setIsGameWon(false)
+          setIsGameLost(true)
+        }
+        setGuesses(loaded.guesses)            
+      }
+  }
+
   useEffect(() => {
-    saveGameStateToLocalStorage({ guesses, solution })
-  }, [guesses])
+    isPracticeMode ? reloadPracticeState() : reloadDailyState()
+  }, [isPracticeMode])
+
+  useEffect(() => {
+    if (!isPracticeMode) {
+      saveGameStateToLocalStorage({ guesses:guesses, solution:dailySolution })
+    }
+  }, [guesses, isPracticeMode])
 
   useEffect(() => {
     if (isGameWon) {
@@ -144,16 +184,20 @@ function App() {
 
         setTimeout(() => {
           setSuccessAlert('')
-          setIsStatsModalOpen(true)
+          if (!isPracticeMode) {
+            setIsStatsModalOpen(true)  
+          }  
         }, ALERT_TIME_MS)
       }, REVEAL_TIME_MS * MAX_WORD_LENGTH)
     }
     if (isGameLost) {
       setTimeout(() => {
-        setIsStatsModalOpen(true)
+        if (!isPracticeMode) {
+          setIsStatsModalOpen(true)  
+        }
       }, GAME_LOST_INFO_DELAY)
     }
-  }, [isGameWon, isGameLost])
+  }, [isGameWon, isGameLost, isPracticeMode])
 
   const onChar = (value: string) => {
     if (
@@ -193,7 +237,7 @@ function App() {
 
     // enforce hard mode - all guesses must contain all previously revealed letters
     if (isHardMode) {
-      const firstMissingReveal = findFirstUnusedReveal(currentGuess, guesses)
+      const firstMissingReveal = findFirstUnusedReveal(currentGuess, guesses, solution)
       if (firstMissingReveal) {
         setIsMissingLetterMessage(firstMissingReveal)
         setIsMissingPreviousLetters(true)
@@ -212,7 +256,7 @@ function App() {
       setIsRevealing(false)
     }, REVEAL_TIME_MS * MAX_WORD_LENGTH)
 
-    const winningWord = isWinningWord(currentGuess)
+    const winningWord = currentGuess === solution
 
     if (
       currentGuess.length === MAX_WORD_LENGTH &&
@@ -223,12 +267,16 @@ function App() {
       setCurrentGuess('')
 
       if (winningWord) {
-        setStats(addStatsForCompletedGame(stats, guesses.length))
+        if (!isPracticeMode) {
+          setStats(addStatsForCompletedGame(stats, guesses.length))
+        }
         return setIsGameWon(true)
       }
 
       if (guesses.length === MAX_CHALLENGES - 1) {
-        setStats(addStatsForCompletedGame(stats, guesses.length + 1))
+        if (!isPracticeMode) {
+          setStats(addStatsForCompletedGame(stats, guesses.length + 1))  
+        }
         setIsGameLost(true)
       }
     }
@@ -244,10 +292,18 @@ function App() {
           className="h-6 w-6 mr-2 cursor-pointer dark:stroke-white"
           onClick={() => setIsInfoModalOpen(true)}
         />
-        <ChartBarIcon
-          className="h-6 w-6 mr-3 cursor-pointer dark:stroke-white"
-          onClick={() => setIsStatsModalOpen(true)}
-        />
+        {isPracticeMode
+          ? 
+          <RefreshIcon 
+            className="h-6 w-6 mr-3 cursor-pointer dark:stroke-white"  
+            onClick={() => reloadPracticeState()}
+          />
+          :
+          <ChartBarIcon
+            className="h-6 w-6 mr-3 cursor-pointer dark:stroke-white"
+            onClick={() => setIsStatsModalOpen(true)}
+          />
+        }   
         <CogIcon
           className="h-6 w-6 mr-3 cursor-pointer dark:stroke-white"
           onClick={() => setIsSettingsModalOpen(true)}
@@ -256,6 +312,7 @@ function App() {
       <Grid
         guesses={guesses}
         currentGuess={currentGuess}
+        solution={solution}
         isRevealing={isRevealing}
         currentRowClassName={currentRowClass}
       />
@@ -264,6 +321,7 @@ function App() {
         onDelete={onDelete}
         onEnter={onEnter}
         guesses={guesses}
+        solution={solution}
         isRevealing={isRevealing}
       />
       <InfoModal
@@ -274,6 +332,7 @@ function App() {
         isOpen={isStatsModalOpen}
         handleClose={() => setIsStatsModalOpen(false)}
         guesses={guesses}
+        solution={dailySolution}
         gameStats={stats}
         isGameLost={isGameLost}
         isGameWon={isGameWon}
@@ -288,6 +347,8 @@ function App() {
         handleClose={() => setIsSettingsModalOpen(false)}
         isHardMode={isHardMode}
         handleHardMode={handleHardMode}
+        isPracticeMode={isPracticeMode}
+        handlePracticeMode={handlePracticeMode}        
         isDarkMode={isDarkMode}
         handleDarkMode={handleDarkMode}
         isHardModeErrorModalOpen={isHardModeAlertOpen}
@@ -303,7 +364,7 @@ function App() {
       <Alert message={missingLetterMessage} isOpen={isMissingPreviousLetters} />
       <Alert
         message={CORRECT_WORD_MESSAGE(solution)}
-        isOpen={isGameLost && !isRevealing}
+        isOpen={!isSettingsModalOpen && isGameLost && !isRevealing}
       />
       <Alert
         message={successAlert}
