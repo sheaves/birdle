@@ -1,3 +1,11 @@
+# Reactle with Practice Mode
+
+This is a version of Reactle with Practice Mode (a.k.a. infinite mode).
+
+Practice mode lets you play an unlimited number of times, without affecting your daily statistics. It randomly serves a solution word each time it is refreshed. It can be toggled on and off in the Settings menu.
+
+The rest of the Readme is from the original Reactle Github page.
+
 # React Wordle
 
 This is a clone project of the popular word guessing game we all know and love. Made using React, Typescript, and Tailwind.
