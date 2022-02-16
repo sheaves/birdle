@@ -1,7 +1,5 @@
 import { getGuessStatuses } from './statuses'
 import { solutionIndex } from './words'
-import { GAME_TITLE } from '../constants/strings'
-import { getStoredIsHighContrastMode } from './localStorage'
 
 export const shareStatus = (
   guesses: string[],
@@ -20,7 +18,6 @@ export const generateEmojiGrid = (guesses: string[], solution: string) => {
   return guesses
     .map((guess) => {
       const status = getGuessStatuses(guess, solution)
-      const isHighContrast = getStoredIsHighContrastMode()
       return guess
         .split('')
         .map((_, i) => {
