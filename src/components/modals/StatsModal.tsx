@@ -79,6 +79,10 @@ export const StatsModal = ({
           </button>
         </div>
       )}
+      <br/>
+      <p className="text-sm text-gray-500 dark:text-gray-300">
+        Turn on Practice Mode to keep playing!
+      </p>
     </BaseModal>
   )
 }
