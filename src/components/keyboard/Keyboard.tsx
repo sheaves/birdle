@@ -1,12 +1,13 @@
 import { getStatuses } from '../../lib/statuses'
 import { Key } from './Key'
 import { useEffect } from 'react'
-import { ENTER_TEXT, DELETE_TEXT } from '../../constants/strings'
+import { ENTER_TEXT, DELETE_TEXT, RANDOM_GUESS_TEXT } from '../../constants/strings'
 
 type Props = {
   onChar: (value: string) => void
   onDelete: () => void
   onEnter: () => void
+  onRandom: () => void
   guesses: string[]
   solution: string
   isRevealing?: boolean
@@ -16,6 +17,7 @@ export const Keyboard = ({
   onChar,
   onDelete,
   onEnter,
+  onRandom,
   guesses,
   solution,
   isRevealing,
@@ -27,7 +29,10 @@ export const Keyboard = ({
       onEnter()
     } else if (value === 'DELETE') {
       onDelete()
-    } else {
+    }  else if (value === 'RANDOM') {
+      onRandom()
+    }
+    else {
       onChar(value)
     }
   }
@@ -38,7 +43,10 @@ export const Keyboard = ({
         onEnter()
       } else if (e.code === 'Backspace') {
         onDelete()
-      } else {
+      } else if (e.code === "ArrowRight") {
+        onRandom()
+      }
+      else {
         const key = e.key.toUpperCase()
         if (key.length === 1 && key >= 'A' && key <= 'Z') {
           onChar(key)
@@ -49,7 +57,7 @@ export const Keyboard = ({
     return () => {
       window.removeEventListener('keyup', listener)
     }
-  }, [onEnter, onDelete, onChar])
+  }, [onEnter, onDelete, onRandom, onChar])
 
   return (
     <div>
@@ -74,6 +82,9 @@ export const Keyboard = ({
             isRevealing={isRevealing}
           />
         ))}
+        <Key width={40} value="RANDOM" onClick={onClick}>
+          {RANDOM_GUESS_TEXT}
+        </Key>        
       </div>
       <div className="flex justify-center">
         <Key width={65.4} value="ENTER" onClick={onClick}>

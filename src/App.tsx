@@ -212,6 +212,10 @@ function App() {
     setCurrentGuess(currentGuess.slice(0, -1))
   }
 
+  const onRandom = () => {
+    setCurrentGuess(getRandomWord()['solution'])
+  }  
+
   const onEnter = () => {
     if (isGameWon || isGameLost) {
       return
@@ -319,6 +323,7 @@ function App() {
         onChar={onChar}
         onDelete={onDelete}
         onEnter={onEnter}
+        onRandom={onRandom}
         guesses={guesses}
         solution={solution}
         isRevealing={isRevealing}
