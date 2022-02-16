@@ -4,7 +4,15 @@ export const WIN_MESSAGES = [
   'Im-peck-able', 
   'You quacked it!', 
   'So fly', 
-  'Owl-some!'
+  'Owl-some',
+  'Un-bill-ievable',
+  'Baza bing baza boom!',
+  'Hen-tastic',
+  'Eggs-traordinary',
+  'Egg-cellent',
+  'Res-peck!',
+  'Talon-ted!',
+  'What a hoot!'
 ]
 export const GAME_COPIED_MESSAGE = 'Game copied to clipboard'
 export const NOT_ENOUGH_LETTERS_MESSAGE = 'Not enough letters'
@@ -19,6 +27,7 @@ export const NOT_CONTAINED_MESSAGE = (letter: string) =>
   `Guess must contain ${letter}`
 export const ENTER_TEXT = 'Enter'
 export const DELETE_TEXT = 'Delete'
+export const RANDOM_GUESS_TEXT = 'Wing It'
 export const STATISTICS_TITLE = 'Statistics'
 export const GUESS_DISTRIBUTION_TEXT = 'Guess Distribution'
 export const NEW_WORD_TEXT = 'New bird in'
