@@ -67,12 +67,13 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
 
           <br/>
           <p className="text-sm text-gray-500 dark:text-gray-300">
-            There are some exceptions to these rules. A complete list of codes is coming soon.
+            Click on a valid guess to reveal the full bird name.
           </p>
           <br/><br/>
         </div>
 
         <div>
+          <br/><br/>
           <p className="text-sm text-gray-500 dark:text-gray-300">
             After each guess, the colour of the tiles will
             change to show how close your guess was.
@@ -113,6 +114,26 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         </div>
 
         <div>
+          <br/><br/>
+          <p className="text-sm text-gray-500 dark:text-gray-300">
+            The usual Hard Mode, Dark mode and High Contrast Mode 
+            are available in the <strong>Settings</strong> menu.
+          </p>
+          <br/>
+          <p className="text-sm text-gray-500 dark:text-gray-300">
+            There is also a <strong>Practice Mode</strong> (a.k.a. Infinite Mode)
+            that lets you keep playing without affecting your daily stats.
+            Click on the Refresh icon to get a new practice puzzle.
+          </p>
+          <br/>
+          <p className="text-sm text-gray-500 dark:text-gray-300">
+            If you're stuck, hit the <strong>Wing It</strong> key to generate
+            a random guess.
+          </p>
+        </div>
+
+        <div>
+          <br/><br/>
           <p className="mt-6 italic text-sm text-gray-500 dark:text-gray-300">
             This is an open-source variant of <a
               href="https://www.powerlanguage.co.uk/wordle/"
@@ -142,8 +163,35 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
               rel="noreferrer"
             >
               Reactle
+            </a>. The code for this site can be found <a
+              href="https://github.com/sheaves/birdle"
+              className="underline font-bold"
+              target="_blank"
+              rel="noreferrer"
+            >
+              here
             </a>.
-          </p>              
+          </p>
+
+          <br/>
+
+          <p className="mt-6 italic text-sm text-gray-500 dark:text-gray-300">
+            The bird names on this site are culled from this <a
+            href="https://singaporebirds.com/singapore-bird-list/"
+            className="underline font-bold"
+            target="_blank"
+            rel="noreferrer"
+            >  
+            list of Singapore birds
+            </a> and this <a
+            href="https://records.singaporebirds.com/rarities/"
+            className="underline font-bold"
+            target="_blank"
+            rel="noreferrer"
+            >  
+            list of rarities
+            </a>.
+          </p>   
         </div>
       </Carousel>    
     </BaseModal>
