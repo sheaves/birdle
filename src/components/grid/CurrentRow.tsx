@@ -1,5 +1,8 @@
 import { MAX_WORD_LENGTH } from '../../constants/settings'
 import { Cell } from './Cell'
+import { Disclosure } from '@headlessui/react'
+import { DEFS } from '../../constants/definitions'
+import { isWordInWordList } from '../../lib/words'
 
 type Props = {
   guess: string
@@ -13,12 +16,35 @@ export const CurrentRow = ({ guess, className }: Props) => {
 
   return (
     <div className={classes}>
-      {splitGuess.map((letter, i) => (
-        <Cell key={i} value={letter} />
-      ))}
-      {emptyCells.map((_, i) => (
-        <Cell key={i} />
-      ))}
+      { (guess.length === MAX_WORD_LENGTH) && (isWordInWordList(guess))
+        ?
+        <Disclosure as="div" className="flex-initial">
+          {({ open }) => (
+          <>
+            <Disclosure.Button>
+              <div className="flex justify-center m-0">
+                {splitGuess.map((letter, i) => (
+                  <Cell key={i} value={letter} />
+                ))}
+              </div>
+            </Disclosure.Button>
+            <Disclosure.Panel className='flex justify-center pb-2 text-sm text-gray-500'>
+              {DEFS[guess.toLowerCase()]}
+            </Disclosure.Panel>
+          </>
+          )}
+        </Disclosure>        
+        :
+        <>
+          {splitGuess.map((letter, i) => (
+            <Cell key={i} value={letter} />
+          ))}
+          {emptyCells.map((_, i) => (
+            <Cell key={i} />
+          ))}        
+        </>
+      }
+
     </div>
   )
 }
