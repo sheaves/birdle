@@ -1,3 +1,5 @@
+import { DEFS } from './definitions'
+
 export const GAME_TITLE = process.env.REACT_APP_GAME_NAME!
 
 export const WIN_MESSAGES = [
@@ -20,7 +22,7 @@ export const WORD_NOT_FOUND_MESSAGE = 'Bird not found'
 export const HARD_MODE_ALERT_MESSAGE =
   'Hard Mode can only be enabled at the start!'
 export const CORRECT_WORD_MESSAGE = (solution: string) =>
-  `The bird was ${solution}`
+  `The bird was the ${DEFS[solution.toLowerCase()]} (${solution})`
 export const WRONG_SPOT_MESSAGE = (guess: string, position: number) =>
   `Must use ${guess} in position ${position}`
 export const NOT_CONTAINED_MESSAGE = (letter: string) =>

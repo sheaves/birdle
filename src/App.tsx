@@ -46,6 +46,7 @@ function App() {
     '(prefers-color-scheme: dark)'
   ).matches
 
+  const [isFirstPlay, setIsFirstPlay] = useState(true)
   const [currentGuess, setCurrentGuess] = useState('')
   const [isGameWon, setIsGameWon] = useState(false)
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
@@ -124,6 +125,7 @@ function App() {
   )
 
   const handlePracticeMode = (isPractice: boolean) => {
+    setCurrentGuess('')
     setIsGameLost(false)
     setIsGameWon(false)
     setIsPracticeMode(isPractice)
@@ -135,6 +137,7 @@ function App() {
   const [guesses, setGuesses] = useState<string[]>([])
 
   const reloadPracticeState = () => {
+      setCurrentGuess('')
       setSolution(getRandomWord()['solution'])
       setIsGameWon(false)
       setIsGameLost(false)
@@ -149,8 +152,10 @@ function App() {
         setIsGameWon(false)
         setIsGameLost(false)
         setGuesses([])
+        setIsFirstPlay(true)
       }
       else {
+        setIsFirstPlay(false)
         const gameWasWon = loaded.guesses.includes(dailySolution)
         if (gameWasWon) {
           setIsGameWon(true)
@@ -183,7 +188,7 @@ function App() {
 
         setTimeout(() => {
           setSuccessAlert('')
-          if (!isPracticeMode) {
+          if (isFirstPlay && !isPracticeMode) {
             setIsStatsModalOpen(true)  
           }  
         }, ALERT_TIME_MS)
@@ -191,12 +196,12 @@ function App() {
     }
     if (isGameLost) {
       setTimeout(() => {
-        if (!isPracticeMode) {
+        if (isFirstPlay && !isPracticeMode) {
           setIsStatsModalOpen(true)  
         }
       }, GAME_LOST_INFO_DELAY)
     }
-  }, [isGameWon, isGameLost, isPracticeMode])
+  }, [isGameWon, isGameLost, isPracticeMode, isFirstPlay])
 
   const onChar = (value: string) => {
     if (
@@ -213,7 +218,9 @@ function App() {
   }
 
   const onRandom = () => {
-    setCurrentGuess(getRandomWord()['solution'])
+    if (!isGameWon) {
+      setCurrentGuess(getRandomWord()['solution'])
+    }    
   }  
 
   const onEnter = () => {
