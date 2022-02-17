@@ -195,6 +195,10 @@ function App() {
           delayMs,
           onClose: () => setIsStatsModalOpen(true),
         })
+      } else {
+        showSuccessAlert(winMessage, {
+          delayMs
+        })        
       }
     }
 
