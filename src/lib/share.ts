@@ -8,7 +8,7 @@ export const shareStatus = (
   isHardMode: boolean
 ) => {
   navigator.clipboard.writeText(
-    `🇸🇬 Birdle ${index} ${lost ? 'X' : guesses.length}/6${
+    `🇸🇬 Birdle ${index}, ${lost ? 'X' : guesses.length}/6${
       isHardMode ? '*' : ''
     }\n\n` + generateEmojiGrid(guesses, solution)
   )
