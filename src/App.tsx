@@ -29,6 +29,7 @@ import {
 import {
   isWordInWordList,
   dailySolution,
+  dailyIndex,
   getRandomWord,
   getRandomGuess,
   findFirstUnusedReveal,
@@ -40,6 +41,7 @@ import {
   setStoredIsHighContrastMode,
   getStoredIsHighContrastMode,
 } from './lib/localStorage'
+import { shareStatus } from './lib/share'
 
 import './App.css'
 
@@ -134,6 +136,10 @@ function App() {
     localStorage.setItem('practiceMode', isPractice ? 'practice' : 'normal')
   }
 
+  const handleShare = () => {
+    setSuccessAlert(GAME_COPIED_MESSAGE)
+    return setTimeout(() => setSuccessAlert(''), ALERT_TIME_MS)
+  }
 
   const [solution, setSolution] = useState('')  
   const [guesses, setGuesses] = useState<string[]>([])
@@ -304,6 +310,10 @@ function App() {
           ?
           <ShareIcon
             className="h-6 w-6 mr-3 cursor-pointer dark:stroke-white"
+            onClick={() => {
+              shareStatus(guesses, solution, isPracticeMode ? 'Practice' : dailyIndex, isGameLost, isHardMode)
+              handleShare()
+            }}
           /> 
           :
           <></>         
@@ -355,13 +365,11 @@ function App() {
         handleClose={() => setIsStatsModalOpen(false)}
         guesses={guesses}
         solution={dailySolution}
+        index={dailyIndex}
         gameStats={stats}
         isGameLost={isGameLost}
         isGameWon={isGameWon}
-        handleShare={() => {
-          setSuccessAlert(GAME_COPIED_MESSAGE)
-          return setTimeout(() => setSuccessAlert(''), ALERT_TIME_MS)
-        }}
+        handleShare={handleShare}
         isHardMode={isHardMode}
       />
       <SettingsModal

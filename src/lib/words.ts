@@ -46,12 +46,12 @@ export const getWordOfDay = () => {
 
   return {
     dailySolution: WORDS[(STEPSIZE * index) % WORDS.length].toUpperCase(),
-    solutionIndex: index,
+    dailyIndex: index,
     tomorrow: nextday,
   }
 }
 
-export const { dailySolution, solutionIndex, tomorrow } = getWordOfDay()
+export const { dailySolution, dailyIndex, tomorrow } = getWordOfDay()
 
 export const getRandomWord = () => {
   const index = Math.floor(Math.random()*WORDS.length)
