@@ -3,6 +3,7 @@ import {
   ChartBarIcon,
   CogIcon,
   RefreshIcon,
+  ShareIcon,
 } from '@heroicons/react/outline'
 import { useState, useEffect } from 'react'
 import { Alert } from './components/alerts/Alert'
@@ -29,6 +30,7 @@ import {
   isWordInWordList,
   dailySolution,
   getRandomWord,
+  getRandomGuess,
   findFirstUnusedReveal,
 } from './lib/words'
 import { addStatsForCompletedGame, loadStats } from './lib/stats'
@@ -219,7 +221,7 @@ function App() {
 
   const onRandom = () => {
     if (!isGameWon) {
-      setCurrentGuess(getRandomWord()['solution'])
+      setCurrentGuess(getRandomGuess()['solution'])
     }    
   }  
 
@@ -298,6 +300,15 @@ function App() {
         <h1 className="text-xl ml-2.5 grow font-bold dark:text-white">
           Birdle &#127480;&#127468;
         </h1>
+        {isGameWon || isGameLost
+          ?
+          <ShareIcon
+            className="h-6 w-6 mr-3 cursor-pointer dark:stroke-white"
+          /> 
+          :
+          <></>         
+        }
+         
         <InformationCircleIcon
           className="h-6 w-6 mr-2 cursor-pointer dark:stroke-white"
           onClick={() => setIsInfoModalOpen(true)}
@@ -313,7 +324,7 @@ function App() {
             className="h-6 w-6 mr-3 cursor-pointer dark:stroke-white"
             onClick={() => setIsStatsModalOpen(true)}
           />
-        }   
+        } 
         <CogIcon
           className="h-6 w-6 mr-3 cursor-pointer dark:stroke-white"
           onClick={() => setIsSettingsModalOpen(true)}

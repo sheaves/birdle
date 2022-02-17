@@ -61,3 +61,10 @@ export const getRandomWord = () => {
   }
 }
 
+export const getRandomGuess = () => {
+  const index = Math.floor(Math.random()*WORDS.concat(VALID_GUESSES).length)
+  return {
+    solution: WORDS.concat(VALID_GUESSES)[index].toUpperCase(),
+    index: index
+  }
+}
