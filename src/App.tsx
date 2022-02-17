@@ -44,6 +44,7 @@ import {
 import { shareStatus } from './lib/share'
 
 import './App.css'
+import { Alert } from './components/alerts/Alert'
 import { AlertContainer } from './components/alerts/AlertContainer'
 import { useAlert } from './context/AlertContext'
 
@@ -287,9 +288,6 @@ function App() {
           setStats(addStatsForCompletedGame(stats, guesses.length + 1))  
         }
         setIsGameLost(true)
-        showErrorAlert(CORRECT_WORD_MESSAGE(solution), {
-          delayMs: REVEAL_TIME_MS * MAX_WORD_LENGTH + 1,
-        })
       }
     }
   }
@@ -380,6 +378,10 @@ function App() {
       />
 
       <AlertContainer />
+      <Alert
+        message={CORRECT_WORD_MESSAGE(solution)}
+        isOpen={isGameLost && !isRevealing && !isSettingsModalOpen && !isInfoModalOpen && !isStatsModalOpen}
+      />
     </div>
   )
 }
