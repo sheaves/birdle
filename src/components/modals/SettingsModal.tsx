@@ -1,7 +1,5 @@
-import { Alert } from '../alerts/Alert'
 import { BaseModal } from './BaseModal'
 import { SettingsToggle } from './SettingsToggle'
-import { HARD_MODE_ALERT_MESSAGE } from '../../constants/strings'
 
 type Props = {
   isOpen: boolean
@@ -12,7 +10,6 @@ type Props = {
   handlePracticeMode: Function
   isDarkMode: boolean
   handleDarkMode: Function
-  isHardModeErrorModalOpen: boolean
   isHighContrastMode: boolean
   handleHighContrastMode: Function
 }
@@ -26,7 +23,6 @@ export const SettingsModal = ({
   handlePracticeMode,
   isDarkMode,
   handleDarkMode,
-  isHardModeErrorModalOpen: isHardModeAlertModalOpen,
   isHighContrastMode,
   handleHighContrastMode,
 }: Props) => {
@@ -52,10 +48,6 @@ export const SettingsModal = ({
           settingName="High Contrast Mode"
           flag={isHighContrastMode}
           handleFlag={handleHighContrastMode}
-        />
-        <Alert
-          message={HARD_MODE_ALERT_MESSAGE}
-          isOpen={isHardModeAlertModalOpen}
         />
       </div>
     </BaseModal>

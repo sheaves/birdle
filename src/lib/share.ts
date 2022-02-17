@@ -1,4 +1,5 @@
 import { getGuessStatuses } from './statuses'
+import { MAX_CHALLENGES } from '../constants/settings'
 
 export const shareStatus = (
   guesses: string[],
@@ -8,7 +9,7 @@ export const shareStatus = (
   isHardMode: boolean
 ) => {
   navigator.clipboard.writeText(
-    `🇸🇬 Birdle ${index}, ${lost ? 'X' : guesses.length}/6${
+    `🇸🇬 Birdle ${index}, ${lost ? 'X' : guesses.length}/${MAX_CHALLENGES}${
       isHardMode ? '*' : ''
     }\n\n` + generateEmojiGrid(guesses, solution)
   )
